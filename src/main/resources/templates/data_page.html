@@ -37,15 +37,14 @@
             <li>Color: <span th:text="${index.color}"></span></li>
             <li>Dominant polutant: <span th:text="${index.dominantPollutant}"></span></li>
         </ul>
-        <h4>Health Recommendations: <br> <span th:text="${responseData.data.healthRecommendations.generalPopulation}"></span></h4>
+        <h4>Health Recommendations: <br> <span th:text="${responseData.data.healthRecommendations?.generalPopulation}"></span></h4>
         <h3>Pollutants and concentrations</h3>
-        <h4><span th:text="${responseData.data.pollutants.co.fullName}"></span> concentration: <span th:text="${responseData.data.pollutants.co.concentration}"></span></h4>
-        <h4><span th:text="${responseData.data.pollutants.no2.fullName}"></span> concentration: <span th:text="${responseData.data.pollutants.no2.concentration}"></span></h4>
-        <h4><span th:text="${responseData.data.pollutants.o3.fullName}"></span> concentration: <span th:text="${responseData.data.pollutants.o3.concentration}"></span></h4>
-        <h4><span th:text="${responseData.data.pollutants.pm10.fullName}"></span> concentration: <span th:text="${responseData.data.pollutants.pm10.concentration}"></span></h4>
-        <h4><span th:text="${responseData.data.pollutants.pm25.fullName}"></span> concentration: <span th:text="${responseData.data.pollutants.pm25.concentration}"></span></h4>
-        <h4><span th:text="${responseData.data.pollutants.so2.fullName}"></span> concentration: <span th:text="${responseData.data.pollutants.so2.concentration}"></span></h4>
-
+        <h4><span th:text="${responseData.data.pollutants?.co?.fullName}"></span> concentration: <span th:text="${responseData.data.pollutants?.co?.concentration}"></span></h4>
+        <h4><span th:text="${responseData.data.pollutants?.no2?.fullName}"></span> concentration: <span th:text="${responseData.data.pollutants?.no2?.concentration}"></span></h4>
+        <h4><span th:text="${responseData.data.pollutants?.o3?.fullName}"></span> concentration: <span th:text="${responseData.data.pollutants?.o3?.concentration}"></span></h4>
+        <h4><span th:text="${responseData.data.pollutants?.pm10?.fullName}"></span> concentration: <span th:text="${responseData.data.pollutants?.pm10?.concentration}"></span></h4>
+        <h4><span th:text="${responseData.data.pollutants?.pm25?.fullName}"></span> concentration: <span th:text="${responseData.data.pollutants?.pm25?.concentration}"></span></h4>
+        <h4><span th:text="${responseData.data.pollutants?.so2?.fullName}"></span> concentration: <span th:text="${responseData.data.pollutants?.so2?.concentration}"></span></h4>
     </div>
 </form>
 </body>
