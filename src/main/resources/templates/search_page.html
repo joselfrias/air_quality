@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+
+        }
+        h1 {
+            color: #ffffff;
+            margin-bottom: 70px;
+            font-size: 45px;
+        }
+
+        .header{
+            height:100vh;
+            background-image:linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),url('https://img5.goodfon.com/wallpaper/nbig/e/7f/sea-sky-sunset-pink-beach-more-nebo-zakat-pliazh.jpg');
+            background-size:cover;
+            background-position:center;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            font-family:sans-serif;
+        }
+
+</style>
+<body>
+
+<div class="header">
+    <form th:action="@{/search}" th:object="${coordinate}" method="get">
+    <h1>Find air quality for a city</h1>
+        <div class="form-box">
+            <input type="text" th:field="*{lat}" placeholder="Latitude">
+            <input type="text" th:field="*{lon}" placeholder="Longitude" >
+             <button type="submit"><i class="fa fa-search"></i></button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
