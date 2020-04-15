@@ -36,5 +36,11 @@ public class CoordResponse {
         return r;
     }
 
-
+    @Override
+    public String toString() {
+        return "{" +
+                "\"coordinates\"" + ":" + c + ","+
+                "\"data\"" +":"+ r.getResponseData().getData() +
+                '}';
+    }
 }

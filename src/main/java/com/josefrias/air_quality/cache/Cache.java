@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 
 
 @Service
@@ -85,7 +86,9 @@ public class Cache {
 
 
     }
-
+    public List<CoordResponse> getContent(){
+        return airQualityRepository.findAll();
+    }
     public static void setCountOfRequests(int countOfRequests) {
         Cache.countOfRequests = countOfRequests;
     }
@@ -97,6 +100,7 @@ public class Cache {
     public static void setMisses(int misses) {
         Cache.misses = misses;
     }
+
 
 
 }

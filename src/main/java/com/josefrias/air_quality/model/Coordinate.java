@@ -46,4 +46,12 @@ public class Coordinate {
     public int hashCode() {
         return Objects.hash(lat, lon);
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"lat\""+ ":" + lat + ","+
+                "\"lon\"" + ":" + lon +
+                '}';
+    }
 }

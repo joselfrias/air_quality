@@ -24,9 +24,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -60,6 +63,21 @@ public class ControllerITest {
                 .andExpect(jsonPath("$.data.indexes.baqi.dominant_pollutant", is(index.getDominantPollutant())));
     }
 
+    @Test
+    public void given1RecordAirQualityData_whenGetAllAirQualityData_thenStatus200() throws Exception {
+        createTestAirQualityData();
+        Index index=new Index("baqi", 70, "70", "#fff", "category1", "co");
+        mvc.perform(get("/api/cache").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+                .andExpect(jsonPath("$.cache", hasSize(1)))
+                .andExpect(jsonPath("$.cache[0].data.indexes.baqi.name", is(index.getName())))
+                .andExpect(jsonPath("$.cache[0].data.indexes.baqi.aqi", is(index.getAqi())))
+                .andExpect(jsonPath("$.cache[0].data.indexes.baqi.aqi_display", is(index.getAqiDisplay())))
+                .andExpect(jsonPath("$.cache[0].data.indexes.baqi.color", is(index.getColor())))
+                .andExpect(jsonPath("$.cache[0].data.indexes.baqi.category", is(index.getCategory())))
+                .andExpect(jsonPath("$.cache[0].data.indexes.baqi.dominant_pollutant", is(index.getDominantPollutant())));
+
+    }
+
     private void createTestAirQualityData() throws ParseException {
         Coordinate coordinate= new Coordinate(-40.0, -40.0);
         Index index=new Index("baqi", 70, "70", "#fff", "category1", "co");
@@ -73,6 +91,8 @@ public class ControllerITest {
         CoordResponse coord_response= new CoordResponse(coordinate, cacheObject);
         airQualityRepository.saveAndFlush(coord_response);
     }
+
+
 
 
 

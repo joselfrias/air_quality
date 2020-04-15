@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 @Repository
 @Transactional
@@ -19,5 +21,7 @@ public interface AirQualityRepository  extends JpaRepository<CoordResponse, Long
 
     @Query(value="select * from coord_response cd where cd.lat= ?1 and cd.lon= ?2 and year(cd.datetime)=?3 and month(cd.datetime)=?4 and day(cd.datetime)=?5", nativeQuery=true)
     CoordResponse findByCoordAndDate(double lat, double lon, int year, int month, int day);
+
+    List<CoordResponse> findAll();
 
 }

@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 @Transactional
@@ -62,7 +63,9 @@ public class AirQualityServiceImpl implements AirQualityService{
         Response<ResponseData> apiResponse;
         try {
             apiResponse = call.execute();
-            addToCache(coordinate, apiResponse.body());
+            if (apiResponse.body()!=null) {
+                addToCache(coordinate, apiResponse.body());
+            }
             return apiResponse.body();
 
         } catch (IOException e) {
@@ -78,7 +81,9 @@ public class AirQualityServiceImpl implements AirQualityService{
         Response<ResponseData> apiResponse;
         try {
             apiResponse = call.execute();
-            addToCache(coordinate, apiResponse.body());
+            if (apiResponse.body()!=null) {
+                addToCache(coordinate, apiResponse.body());
+            }
             return apiResponse.body();
 
         } catch (IOException e) {
@@ -99,6 +104,10 @@ public class AirQualityServiceImpl implements AirQualityService{
         else{
             return -1;
         }
+    }
+
+    public List<CoordResponse> getCacheContent(){
+        return cache.getContent();
     }
 
 

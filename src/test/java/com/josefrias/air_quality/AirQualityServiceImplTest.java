@@ -25,7 +25,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -64,6 +66,7 @@ public class AirQualityServiceImplTest {
         Mockito.when(cache.containsCoord(new Coordinate(-20.0, -40.0), "2020-04-02")).thenReturn(false);
         Mockito.when(cache.add(coordinate, responseData)).thenReturn(coord_response);
         Mockito.when(cache.containsCoord(coordinate, "2020-04-09")).thenReturn(false);
+        Mockito.when(cache.getContent()).thenReturn(Arrays.asList(coord_response));
 
     }
     @AfterEach
@@ -176,6 +179,22 @@ public class AirQualityServiceImplTest {
 
     }
 
+    @Test
+    public void given1Record_whengetAll_thenReturn1Record() throws ParseException {
+        Coordinate coordinate= new Coordinate(-40.0, -40.0);
+        Index index=new Index("baqi", 70, "70", "#fff", "category1", "co");
+        IndexList indexList= new IndexList(index);
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = formatter.parse("2020-04-02 13:00:00");
+        Data data=new Data(date,
+                indexList);
+        ResponseData responseData= new ResponseData(null, data, null);
+        CacheObject cacheObject= new CacheObject(responseData, 10000);
+        CoordResponse coord_response= new CoordResponse(coordinate, cacheObject);
+        List<CoordResponse> allCacheRecords=cache.getContent();
+        verifyGetContentIsCalledOnce();
+
+    }
 
     private void verifyCacheFindByCoordAndDateIsCalledOnce(double lat, double lon,String date) {
         Mockito.verify(cache, VerificationModeFactory.times(1)).get(new Coordinate(lat, lon),date);
@@ -185,8 +204,9 @@ public class AirQualityServiceImplTest {
         Mockito.verify(cache, VerificationModeFactory.times(1)).containsCoord(new Coordinate(lat, lon),date);
     }
 
-
-
-
+    private void verifyGetContentIsCalledOnce(){
+        Mockito.verify(cache, VerificationModeFactory.times(1)).getContent();
+        Mockito.reset();
+    }
 
 }

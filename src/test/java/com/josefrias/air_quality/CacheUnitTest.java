@@ -22,7 +22,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -51,6 +54,7 @@ public class CacheUnitTest {
 
         Mockito.when(airQualityRepository.findByCoordAndDate(coordinate.getLat(), coordinate.getLon(), 2020, 4, 2))
                 .thenReturn(coord_response);
+        Mockito.when(airQualityRepository.findAll()).thenReturn(Arrays.asList(coord_response));
 
     }
 
@@ -113,6 +117,23 @@ public class CacheUnitTest {
         assertEquals(1,Cache.getCountOfRequests());
     }
 
+    @Test
+    public void given1Record_whengetAll_thenReturn1Record() throws ParseException {
+        Coordinate coordinate= new Coordinate(-40.0, -40.0);
+        Index index=new Index("baqi", 70, "70", "#fff", "category1", "co");
+        IndexList indexList= new IndexList(index);
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = formatter.parse("2020-04-02 13:00:00");
+        Data data=new Data(date, indexList);
+
+        ResponseData responseData= new ResponseData(null, data, null);
+        CacheObject cacheObject= new CacheObject(responseData, 10000);
+        CoordResponse coord_response= new CoordResponse(coordinate,cacheObject);
+
+        List<CoordResponse> allCacheRecords=cache.getContent();
+        verifyFindAllIsCalledOnce();
+
+    }
 
     private void verifyFindByCoordAndDateIsCalledOnce(double lat, double lon, String date) {
         String splitting[]=date.split("-");
@@ -120,6 +141,11 @@ public class CacheUnitTest {
         int mont= Integer.parseInt(splitting[1]);
         int day=Integer.parseInt(splitting[2]);
         Mockito.verify(airQualityRepository, VerificationModeFactory.times(1)).findByCoordAndDate(lat, lon,year, mont, day );
+        Mockito.reset(airQualityRepository);
+    }
+
+    private void verifyFindAllIsCalledOnce(){
+        Mockito.verify(airQualityRepository, VerificationModeFactory.times(1)).findAll();
         Mockito.reset(airQualityRepository);
     }
 

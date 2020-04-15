@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
@@ -36,7 +37,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @WebMvcTest(AirQualityController.class)
 public class AirQualityControllerITest {
@@ -104,6 +107,35 @@ public class AirQualityControllerITest {
         verify(service, VerificationModeFactory.times(1)).getData(coordinate);
         reset(service);
 
+    }
+
+    @Test
+    public void given1Record_whenGetAllRecords_thenReturnJsonArray() throws Exception {
+        Coordinate coordinate= new Coordinate(-40.0, -40.0);
+        Index index=new Index("baqi", 70, "70", "#fff", "category1", "co");
+        IndexList indexList= new IndexList(index);
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = formatter.parse("2020-04-04 13:00:00");
+        Data data=new Data(date,indexList);
+
+        ResponseData responseData= new ResponseData(null, data, null);
+        CacheObject cacheObject= new CacheObject(responseData, 10000);
+        CoordResponse coord_response= new CoordResponse(coordinate, cacheObject);
+
+        List<CoordResponse> allRecords = Arrays.asList(coord_response);
+
+        given(service.getCacheContent()).willReturn(allRecords);
+
+        mvc.perform(get("/api/cache").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+                .andExpect(jsonPath("$.cache", hasSize(1)))
+                .andExpect(jsonPath("$.cache[0].data.indexes.baqi.name", is(index.getName())))
+                .andExpect(jsonPath("$.cache[0].data.indexes.baqi.aqi", is(index.getAqi())))
+                .andExpect(jsonPath("$.cache[0].data.indexes.baqi.aqi_display", is(index.getAqiDisplay())))
+                .andExpect(jsonPath("$.cache[0].data.indexes.baqi.color", is(index.getColor())))
+                .andExpect(jsonPath("$.cache[0].data.indexes.baqi.category", is(index.getCategory())))
+                .andExpect(jsonPath("$.cache[0].data.indexes.baqi.dominant_pollutant", is(index.getDominantPollutant())));
+        verify(service, VerificationModeFactory.times(1)).getCacheContent();
+        reset(service);
     }
 
     @Test
