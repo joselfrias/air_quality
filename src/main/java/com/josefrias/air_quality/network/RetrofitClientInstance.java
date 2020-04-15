@@ -8,6 +8,9 @@ public class RetrofitClientInstance {
     private static Retrofit retrofit;
     private static final String BASE_URL = "https://api.breezometer.com/air-quality/v2/";
 
+    private RetrofitClientInstance(){
+
+    }
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {
             retrofit = new retrofit2.Retrofit.Builder()

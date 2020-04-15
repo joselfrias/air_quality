@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class Cache {
-    private static final int CLEAN_UP_PERIOD_IN_SEC =20 ;
-    private static final int TIME_TO_LIVE =45;
+    private static final int CLEAN_TIME =60 ;
+    private static final int TIME_TO_LIVE =100;
     private static int countOfRequests=0;
     private static int hits=0;
     private static int misses=0;
@@ -26,7 +26,7 @@ public class Cache {
         Thread cleanerThread = new Thread(() -> {
             while (!Thread.currentThread().isInterrupted()) {
                 try {
-                    Thread.sleep((long)CLEAN_UP_PERIOD_IN_SEC * 1000);
+                    Thread.sleep((long)CLEAN_TIME * 1000);
                     airQualityRepository.delete(System.currentTimeMillis());
 
                 } catch (InterruptedException e) {

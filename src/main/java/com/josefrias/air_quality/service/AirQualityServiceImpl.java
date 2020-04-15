@@ -66,7 +66,6 @@ public class AirQualityServiceImpl implements AirQualityService{
             return apiResponse.body();
 
         } catch (IOException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -83,7 +82,6 @@ public class AirQualityServiceImpl implements AirQualityService{
             return apiResponse.body();
 
         } catch (IOException e) {
-            e.printStackTrace();
             return null;
         }
     }
